@@ -3,61 +3,67 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Course Player | E-LearnPro</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Watch Course - SkillNest</title>
+
+  <link rel="stylesheet" href="course-player.css" />
 </head>
-
 <body>
-  <header class="navbar glass">
-    <div class="logo">E-LearnPro</div>
-    <nav><a href="courses.html">← Back to Courses</a></nav>
-    <div class="theme-toggle"><button id="themeBtn">🌙</button></div>
-  </header>
 
-  <div class="player-container fade-up">
-    <h2 id="courseTitle">Loading Course…</h2>
-    <video id="video" width="80%" controls></video>
+  <!-- =============================== -->
+  <!-- 🔻 HEADER BAR -->
+  <!-- =============================== -->
+ <div class="top-bar">
+  <div class="logo">SkillNest</div>
+  <div class="course-title" id="courseTitle">Loading...</div>
+
+  <button class="playlist-toggle" onclick="togglePlaylist()">
+    Playlist
+  </button>
+</div>
+
+
+  <!-- =============================== -->
+  <!-- 🔻 MAIN PLAYER AREA -->
+  <!-- =============================== -->
+<div class="player-container">
+
+  <!-- LEFT -->
+  <div class="video-area">
+      <iframe id="playerFrame"></iframe>
+
+      <div class="video-info">
+        <h2 id="videoTitle">Select a video</h2>
+        <p id="videoDesc"></p>
+      </div>
   </div>
 
-  <footer><p>Tracking your progress automatically 🕒</p></footer>
+  <!-- RIGHT PLAYLIST -->
+  <div class="playlist" id="playlist">
+      Loading playlist...
+  </div>
 
-  <script>
-    const params=new URLSearchParams(location.search);
-    const videoURL=decodeURIComponent(params.get("video")||"");
-    const courseName=decodeURIComponent(params.get("course")||"Unknown Course");
-    const email=localStorage.getItem("userEmail")||"guest@unknown";
-    const baseScriptURL="https://script.google.com/macros/s/AKfycbxfOQmeZYK8mu2PVdbVuIOn9QXwgGIU4uVGTfz8bdSwmQpQhMTDNZQsmrOics8iSKd6dQ/exec";
-    const scriptURL=location.hostname.includes("127.0.0.1")||location.hostname.includes("localhost")
-      ?"https://corsproxy.io/?"+encodeURIComponent(baseScriptURL):baseScriptURL;
+</div>
 
-    const video=document.getElementById("video");
-    const title=document.getElementById("courseTitle");
-    title.textContent=courseName;
-    video.src=videoURL;
+<div class="compiler-area">
+    <h3>💻 Try Yourself Compiler</h3>
 
-    let watch=0;
-    setInterval(()=>{if(!video.paused)watch++;},1000);
+    <select id="language">
+        <option value="python">Python</option>
+        <option value="cpp">C++</option>
+        <option value="c">C</option>
+        <option value="java">Java</option>
+        <option value="csharp">C#</option>
+        <option value="javascript">JavaScript</option>
+    </select>
 
-    window.addEventListener("beforeunload",()=>{
-      const min=Math.round(watch/60);
-      if(min>0){
-        const f=new FormData();
-        f.append("action","trackActivity");
-        f.append("email",email);
-        f.append("courseName",courseName);
-        f.append("watchMinutes",min);
-        fetch(scriptURL,{method:"POST",body:f});
-      }
-    });
+    <textarea id="codeEditor" placeholder="Write your code here..."></textarea>
 
-    // 🌗 Theme toggle
-    const btn=document.getElementById("themeBtn");
-    const saved=localStorage.getItem("theme");
-    if(saved==="dark"){document.body.classList.add("dark");btn.textContent="☀️";}
-    btn.onclick=()=>{document.body.classList.toggle("dark");
-      const dark=document.body.classList.contains("dark");
-      btn.textContent=dark?"☀️":"🌙";
-      localStorage.setItem("theme",dark?"dark":"light");};
-  </script>
+    <button onclick="runCode()" class="run-btn">▶ Run Code</button>
+
+    <pre id="outputBox">Output will appear here...</pre>
+</div>
+
+
+  <script src="course-player.js"></script>
 </body>
 </html>

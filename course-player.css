@@ -1,0 +1,266 @@
+/* ================================
+   GLOBAL
+================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background: #000;
+  color: #fff;
+  overflow: hidden;
+}
+
+/* ================================
+   TOP BAR (Netflix Style)
+================================ */
+.top-bar {
+  width: 100%;
+  height: 60px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 25px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.top-bar .logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #e50914; /* Netflix Red */
+  letter-spacing: 1px;
+}
+
+.top-bar .course-title {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.playlist-toggle {
+  padding: 8px 14px;
+  background: #e50914;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.playlist-toggle:hover {
+  background: #b20710;
+  transform: translateY(-2px);
+}
+
+/* ================================
+   MAIN PLAYER LAYOUT
+================================ */
+.player-container {
+  display: flex;
+  width: 100%;
+  height: calc(100vh - 60px);
+}
+
+/* ================================
+   LEFT: VIDEO AREA
+================================ */
+.video-area {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+  background: #000;
+}
+
+.video-area iframe {
+  width: 100%;
+  height: 70%;
+  border: none;
+  background: black;
+}
+
+.video-info {
+  padding: 20px;
+}
+
+.video-info h2 {
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+
+.video-info p {
+  font-size: 15px;
+  opacity: 0.8;
+}
+
+/* ================================
+   RIGHT: PLAYLIST PANEL
+================================ */
+.playlist {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+
+.playlist h3 {
+  margin-bottom: 15px;
+  font-weight: 600;
+  font-size: 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding-bottom: 10px;
+}
+
+/* HIDE PLAYLIST ON MOBILE */
+@media (max-width: 850px) {
+  .playlist {
+    position: fixed;
+    right: 0;
+    top: 60px;
+    width: 280px;
+    height: calc(100vh - 60px);
+    transform: translateX(100%); /* hidden by default */
+  }
+
+  .playlist.open {
+    transform: translateX(0%) !important;
+  }
+}
+
+/* ================================
+   PLAYLIST ITEMS
+================================ */
+.playlist-card {
+  padding: 12px;
+  margin-bottom: 12px;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.playlist-card:hover {
+  background: rgba(255,255,255,0.15);
+  transform: translateX(4px);
+}
+
+.playlist-card h4 {
+  margin: 0;
+  font-size: 16px;
+  color: #e50914;
+}
+
+.playlist-card p {
+  margin-top: 4px;
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+/* Scrollbar styling */
+.playlist::-webkit-scrollbar {
+  width: 6px;
+}
+
+.playlist::-webkit-scrollbar-thumb {
+  background: #e50914;
+  border-radius: 10px;
+}
+.compiler-area {
+  margin-top: 20px;
+  background: rgba(255,255,255,0.05);
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+#codeEditor {
+  width: 100%;
+  height: 200px;
+  margin-top: 10px;
+  padding: 10px;
+  background: #0f0f0f;
+  color: #00ff9d;
+  border-radius: 10px;
+  border: 1px solid #333;
+  font-family: monospace;
+  font-size: 14px;
+}
+
+.run-btn {
+  margin-top: 10px;
+  padding: 12px 18px;
+  background: #4ade80;
+  border: none;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#outputBox {
+  background: #000;
+  color: #4ade80;
+  padding: 15px;
+  margin-top: 12px;
+  border-radius: 10px;
+  min-height: 120px;
+}
+.player-container {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;  /* ⭐ Compiler ko neeche place dene ke liye */
+}
+/* ---------------------------
+   FIX: Compiler visible
+---------------------------- */
+.compiler-area {
+  margin-top: 20px !important;
+  padding: 20px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  width: 100%;
+}
+
+/* Player container must allow space for compiler */
+.player-container {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 40px; /* ⭐⭐ MOST IMPORTANT */
+}
+
+/* Playlist should NOT hide compiler */
+.playlist {
+  flex: 1;
+  max-height: 80vh;  /* ⭐ use max-height */
+  overflow-y: auto;
+}
+
+/* Video area stretch */
+.video-area {
+  flex: 2.5;
+}
+
+/* Editor box */
+#codeEditor {
+  width: 100%;
+  height: 220px;
+  background: #0a0a0a;
+  border: 1px solid #333;
+  border-radius: 10px;
+  color: #00ff9d;
+  padding: 10px;
+  font-family: monospace;
+}
+
+/* Output */
+#outputBox {
+  background: #000;
+  padding: 15px;
+  border-radius: 10px;
+  margin-top: 15px;
+  min-height: 120px;
+  color: #4ade80;
+}

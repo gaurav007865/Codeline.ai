@@ -286,14 +286,15 @@ async function loadWatchClasses() {
 
 
 
+
 /* =========================================================
    WATCH COURSE PAGE
 ========================================================= */
-function openWatchPage(courseName) {
+function openWatchPage(courseName){
   localStorage.setItem("watchCourse", courseName);
-  showSection("watchPlayer");
-  loadWatchPageVideos();
+  window.location.href = "course-player.html";  
 }
+
 
 
 
