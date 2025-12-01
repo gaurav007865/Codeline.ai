@@ -1,0 +1,329 @@
+/* =======================================================
+   🌍 GLOBAL STYLES
+======================================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background: #f7f9fc;
+  color: #222;
+  overflow-x: hidden;
+}
+
+h1, h2, h3 {
+  font-weight: 600;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* =======================================================
+   🧭 NAVBAR
+======================================================= */
+header {
+  position: sticky;
+  top: 0;
+  background: #fff;
+  padding: 15px 8%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+}
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #0078ff, #00c6ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.nav-links {
+  display: flex;
+  gap: 30px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-weight: 500;
+  color: #222;
+  transition: 0.3s;
+}
+
+.nav-links a:hover {
+  color: #0078ff;
+}
+
+/* =======================================================
+   🏠 HERO SECTION
+======================================================= */
+.hero {
+  background: linear-gradient(135deg, #0078ff, #00c6ff);
+  color: #fff;
+  text-align: center;
+  padding: 100px 20px;
+  border-radius: 0 0 40px 40px;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+/* =======================================================
+   🧾 FORM (LOGIN / REGISTER)
+======================================================= */
+.form-container {
+  max-width: 400px;
+  margin: 90px auto;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+}
+
+.form-container h2 {
+  color: #0078ff;
+  margin-bottom: 25px;
+}
+
+input {
+  width: 100%;
+  padding: 12px 15px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  transition: all 0.3s;
+}
+
+input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #0078ff;
+  background: #fff;
+}
+
+.btn {
+  display: inline-block;
+  background: linear-gradient(90deg, #0078ff, #00c6ff);
+  color: #fff;
+  padding: 12px 30px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+.form-container p {
+  margin-top: 15px;
+  font-size: 0.9rem;
+}
+
+/* =======================================================
+   🎓 COURSES
+======================================================= */
+.course-section {
+  padding: 80px 8%;
+  background: #fff;
+}
+
+.course-section h2 {
+  text-align: center;
+  margin-bottom: 40px;
+  color: #222;
+}
+
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 25px;
+}
+
+.course-card {
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  padding: 25px;
+  text-align: center;
+  transition: all 0.3s;
+}
+
+.course-card:hover {
+  transform: translateY(-5px);
+  border: 1px solid #00aaff;
+}
+
+.course-card h3 {
+  color: #0078ff;
+  margin-bottom: 10px;
+}
+
+.course-card p {
+  color: #555;
+  margin-bottom: 10px;
+}
+
+/* =======================================================
+   📢 ADS SECTION
+======================================================= */
+.ads {
+  background: linear-gradient(120deg, #f0f8ff, #ffffff);
+  text-align: center;
+  padding: 60px 8%;
+}
+
+.ads h2 {
+  font-size: 2rem;
+  margin-bottom: 40px;
+  color: #111;
+}
+
+#ads-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+}
+
+.ad-card {
+  background: #fff;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transition: 0.3s;
+}
+
+.ad-card:hover {
+  transform: translateY(-5px);
+}
+
+/* =======================================================
+   📊 ADMIN DASHBOARD
+======================================================= */
+.admin-dashboard {
+  display: flex;
+  height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 250px;
+  background: linear-gradient(180deg, #0078ff, #005fcc);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+  position: fixed;
+  height: 100%;
+}
+
+.brand {
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 30px;
+}
+
+.sidebar-menu {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar-menu li {
+  padding: 12px 25px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.sidebar-menu li:hover,
+.sidebar-menu li.active {
+  background: rgba(255, 255, 255, 0.2);
+  border-left: 4px solid #fff;
+}
+
+/* Main Content */
+.main-content {
+  margin-left: 250px;
+  padding: 30px;
+  background: #f5f7fa;
+  width: calc(100% - 250px);
+  overflow-y: auto;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.admin-header h2 {
+  color: #0078ff;
+}
+
+/* Overview Cards */
+.overview-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: #fff;
+  padding: 20px;
+  text-align: center;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.card h3 {
+  font-size: 1.8rem;
+  color: #0078ff;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+th, td {
+  padding: 12px 15px;
+  text-align: left;
+}
+
+th {
+  background: #0078ff;
+  color: #fff;
+}
+
+tr:nth-child(even) {
+  background: #f1f6ff;
+}
+.active-section {
+  display: block;
+}

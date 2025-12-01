@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Certificate</title>
+<link rel="stylesheet" href="certificate.css">
+</head>
+<body>
+<script>
+const userEmail = localStorage.getItem("email");
+const courseName = localStorage.getItem("certificateCourse");
+
+if (!userEmail || !courseName) {
+    alert("Unauthorized Access!");
+    window.location.href = "dashboard.html";
+}
+
+// VERIFY from backend that certificate is approved
+fetch(`${scriptURL}?action=getCertificates&email=${userEmail}`)
+  .then(res => res.json())
+  .then(data => {
+    const cert = data.find(c => c.course === courseName);
+
+    if (!cert || cert.status !== "Approved") {
+        alert("Certificate not approved!");
+        window.location.href = "user-dashboard.html";
+    }
+  });
+</script>
+
+<div class="certificate-container" id="certificate">
+
+    <!-- COD LOGO -->
+    <img src="Codeline-logo.jpeg" class="logo" alt="COD Logo">
+
+    <h1 class="title">Certificate of Achievement</h1>
+
+    <p class="subtitle">THE FOLLOWING AWARD IS GIVEN TO</p>
+
+    <!-- USER NAME -->
+    <h2 class="username" id="userName">Your Name</h2>
+
+    <p class="middle-line"></p>
+
+    <p class="subtitle small">FOR SUCCESSFULLY COMPLETING</p>
+
+    <!-- COURSE NAME -->
+    <h2 class="course" id="courseName">Course Name</h2>
+
+    <!-- DATE -->
+    <p class="subtitle small issued">Issued on: <span id="issuedDate"></span></p>
+
+    <!-- BADGE -->
+    <div class="badge"></div>
+
+    <!-- SIGNATURES -->
+    <div class="signature-area">
+        <div>
+            <div class="line"></div>
+            <p>Head of Event</p>
+        </div>
+
+        <div>
+            <div class="line"></div>
+            <p>Mentor</p>
+        </div>
+    </div>
+</div>
+
+<button class="download-btn" onclick="downloadPDF()">Download Certificate</button>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script src="certificate.js"></script>
+
+</body>
+</html>
