@@ -3,87 +3,382 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Watch Course - SkillNest</title>
+  <title>Codeline.ai | Course Player</title>
 
-  <link rel="stylesheet" href="course-player.css" />
+  <style>
+    /* ============================= GLOBAL ============================= */
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background: #0a0f1f;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    /* ============================= TOP BAR ============================= */
+    .top-bar {
+      width: 100%;
+      padding: 15px 25px;
+      background: rgba(15, 20, 35, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0,255,180,0.2);
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #4ade80;
+    }
+
+    .course-title {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    /* ============================= PLAYER + PLAYLIST ============================= */
+    .player-container {
+      display: flex;
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .video-area {
+      flex: 3;
+    }
+
+    #playerFrame {
+      width: 100%;
+      height: 430px;
+      border-radius: 12px;
+      border: none;
+      background: #000;
+    }
+
+    .video-info {
+      margin-top: 12px;
+    }
+
+    .video-info h2 {
+      font-size: 22px;
+      color: #4ade80;
+    }
+
+    .video-info p {
+      color: #d1d5db;
+    }
+
+    /* ============================= PLAYLIST ============================= */
+    .playlist {
+      flex: 1.2;
+      max-height: 80vh;
+      overflow-y: auto;
+      padding-right: 10px;
+    }
+
+    .playlist-card {
+      padding: 12px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 10px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: 0.3s;
+      border: 1px solid transparent;
+    }
+
+    .playlist-card:hover {
+      background: rgba(255,255,255,0.12);
+      border-color: #4ade80;
+    }
+
+    .playlist-card h4 {
+      font-size: 15px;
+      color: #4ade80;
+    }
+
+    .playlist-card p {
+      font-size: 13px;
+      color: #cbd5e1;
+    }
+
+    /* ============================= ASSIGNMENTS ============================= */
+    .assignment-section {
+      margin: 30px 20px;
+      background: rgba(255,255,255,0.05);
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid rgba(0,255,180,0.2);
+    }
+
+    .assignment-section h3 {
+      font-size: 22px;
+      color: #4ade80;
+      margin-bottom: 15px;
+    }
+
+    .assignment-card {
+      padding: 15px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 10px;
+      border-left: 3px solid #4ade80;
+      margin-bottom: 15px;
+    }
+
+    .assignment-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #4ade80;
+    }
+
+    .assignment-desc {
+      font-size: 14px;
+      color: #e2e8f0;
+      margin: 6px 0;
+    }
+
+    .resource-link {
+      color: #4ade80;
+      font-size: 14px;
+      display: inline-block;
+      margin-top: 5px;
+    }
+
+    /* ============================= COMPILER ============================= */
+    .compiler-container {
+      width: 92%;
+      margin: 30px auto;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(0,255,180,0.3);
+      backdrop-filter: blur(12px);
+      padding-bottom: 20px;
+    }
+
+    .compiler-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 18px;
+      border-bottom: 1px solid rgba(0,255,180,0.2);
+    }
+
+    .lang-select {
+      background: transparent;
+      border: 1px solid #4ade80;
+      color: #4ade80;
+      padding: 6px 12px;
+      border-radius: 8px;
+    }
+
+    #codeEditor {
+      width: 95%;
+      height: 220px;
+      background: rgba(0,0,0,0.7);
+      color: #4ade80;
+      border: none;
+      outline: none;
+      padding: 15px;
+      font-size: 14px;
+      margin-top: 12px;
+      border-radius: 10px;
+    }
+
+    .run-btn {
+      margin-left: 18px;
+      margin-top: 15px;
+      padding: 8px 18px;
+      border: none;
+      background: #4ade80;
+      color: #000;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    #outputBox {
+      width: 95%;
+      margin: 15px auto;
+      background: rgba(0,0,0,0.6);
+      padding: 15px;
+      border-radius: 10px;
+      color: #22c55e;
+      min-height: 100px;
+      border: 1px solid rgba(0,255,180,0.3);
+      white-space: pre-wrap;
+    }
+
+    /* ============================= RESPONSIVE ============================= */
+    @media (max-width: 900px){
+      .player-container {
+        flex-direction: column;
+      }
+
+      #playerFrame {
+        height: 260px;
+      }
+    }
+  </style>
+
 </head>
+
 <body>
 
-  <!-- =============================== -->
-  <!-- 🔻 HEADER BAR -->
-  <!-- =============================== -->
+  <!-- ================= TOP BAR ================= -->
   <div class="top-bar">
-    <div class="logo">SkillNest</div>
-    <div class="course-title" id="courseTitle">Loading...</div>
-
-    <button class="playlist-toggle" onclick="togglePlaylist()">
-      Playlist
-    </button>
+    <div class="logo">Codeline.ai</div>
+    <div id="courseTitle" class="course-title">Course</div>
   </div>
 
-
-  <!-- =============================== -->
-  <!-- 🔻 MAIN PLAYER + PLAYLIST -->
-  <!-- =============================== -->
+  <!-- ================= VIDEO + PLAYLIST ================= -->
   <div class="player-container">
 
-    <!-- LEFT VIDEO AREA -->
     <div class="video-area">
-        <iframe id="playerFrame" allowfullscreen></iframe>
+      <iframe id="playerFrame"></iframe>
 
-        <div class="video-info">
-          <h2 id="videoTitle">Select a video</h2>
-          <p id="videoDesc"></p>
-        </div>
-    </div>
-
-    <!-- RIGHT PLAYLIST -->
-    <div class="playlist" id="playlist">
-        Loading playlist...
-    </div>
-
-  </div>
-
-
-  <!-- =============================== -->
-  <!-- 🔻 ASSIGNMENT SECTION -->
-  <!-- =============================== -->
-  <div class="assignment-section">
-      <h3>📝 Assignments</h3>
-     <div id="assignmentList">Loading assignments...</div>
-
-  </div>
-
-
-  <!-- =============================== -->
-  <!-- 🔻 COMPILER SECTION -->
-  <!-- =============================== -->
-
-  <div class="compiler-container">
-
-      <div class="compiler-header">
-          <span class="dot red"></span>
-          <span class="dot yellow"></span>
-          <span class="dot green"></span>
-
-          <select id="language" class="lang-select">
-              <option value="python">Python</option>
-              <option value="cpp">C++</option>
-              <option value="c">C</option>
-              <option value="java">Java</option>
-              <option value="csharp">C#</option>
-              <option value="javascript">JavaScript</option>
-          </select>
+      <div class="video-info">
+        <h2 id="videoTitle">Loading...</h2>
+        <p id="videoDesc"></p>
       </div>
+    </div>
 
-      <textarea id="codeEditor" placeholder="Write your code..."></textarea>
+    <div class="playlist" id="playlist">Loading videos...</div>
 
-      <button onclick="runCode()" class="run-btn">▶ Run</button>
+  </div>
 
-      <pre id="outputBox">Output will appear here...</pre>
+  <!-- ================= ASSIGNMENTS ================= -->
+  <div class="assignment-section">
+    <h3>Assignments</h3>
+    <div id="assignmentList">Loading assignments...</div>
+  </div>
+
+  <!-- ================= COMPILER ================= -->
+  <div class="compiler-container">
+    <div class="compiler-header">
+      <h3>💻 Try Code Yourself</h3>
+
+      <select id="language" class="lang-select">
+        <option value="javascript">JavaScript</option>
+        <option value="python">Python 3</option>
+        <option value="cpp">C++</option>
+        <option value="c">C</option>
+        <option value="java">Java</option>
+      </select>
+    </div>
+
+    <textarea id="codeEditor" placeholder="Write code here..."></textarea>
+
+    <button class="run-btn" onclick="runCode()">▶ Run Code</button>
+
+    <div id="outputBox">Output will appear here...</div>
   </div>
 
 
-  <script src="course-player.js"></script>
+<script>
+/* ================================ CONFIG ================================ */
+const scriptURL =
+  "https://script.google.com/macros/s/AKfycbxZx6aFD1rCCR8jtlUu4SjujiK7dgOkZr5WmT6Ug8lTD4vXZWNFcuuJ0LYJcc7JaHsKvA/exec";
+
+const courseName = localStorage.getItem("watchCourse") || "Course";
+document.getElementById("courseTitle").innerText = courseName;
+
+/* ================================ LOAD VIDEOS ================================ */
+async function loadCourseVideos() {
+  const res = await fetch(`${scriptURL}?action=getVideos`);
+  const videos = await res.json();
+  const filtered = videos.filter(v => v.course === courseName);
+
+  if (!filtered.length) {
+    playlist.innerHTML = "<p>No videos found.</p>";
+    return;
+  }
+
+  playlist.innerHTML = filtered
+    .map(v => `
+      <div class="playlist-card" onclick="playVideo('${v.id}','${v.link}','${v.title}','${v.desc}')">
+        <h4>${v.title}</h4>
+        <p>${v.desc}</p>
+      </div>
+    `)
+    .join("");
+
+  playVideo(filtered[0].id, filtered[0].link, filtered[0].title, filtered[0].desc);
+}
+
+/* ================================ PLAY VIDEO ================================ */
+function playVideo(videoID, link, title, desc) {
+  if (link.includes("watch?v=")) link = link.replace("watch?v=", "embed/");
+  if (link.includes("youtu.be")) link = link.replace("youtu.be/", "www.youtube.com/embed/");
+
+  playerFrame.src = link;
+  videoTitle.innerText = title;
+  videoDesc.innerText = desc;
+
+  loadAssignments(videoID);
+}
+
+/* ================================ ASSIGNMENTS ================================ */
+async function loadAssignments(videoID) {
+  assignmentList.innerHTML = "Loading assignments...";
+
+  const res = await fetch(`${scriptURL}?action=getAssignments`);
+  const data = await res.json();
+
+  const filtered = data.filter(
+    a => a.VideoID.toString() === videoID.toString() && a.CourseName === courseName
+  );
+
+  if (!filtered.length) {
+    assignmentList.innerHTML = "<p>No assignments.</p>";
+    return;
+  }
+
+  assignmentList.innerHTML = filtered
+    .map(a => `
+      <div class="assignment-card">
+        <div class="assignment-title">${a.Title}</div>
+        <p class="assignment-desc">${a.Description}</p>
+        ${
+          a.ResourceLink
+            ? `<a class="resource-link" target="_blank" href="${a.ResourceLink}">Open Resource</a>`
+            : ""
+        }
+      </div>
+    `)
+    .join("");
+}
+
+/* ================================ COMPILER ================================ */
+async function runCode() {
+  const lang = document.getElementById("language").value;
+  const code = document.getElementById("codeEditor").value;
+
+  outputBox.innerText = "⏳ Running...";
+
+  try {
+    const res = await fetch("https://ce.judge0.com/submissions?base64_encoded=false&wait=true", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        language_id: {javascript:63, python:71, cpp:54, c:50, java:62}[lang],
+        source_code: code
+      })
+    });
+
+    const data = await res.json();
+    outputBox.innerText =
+      data.stdout || data.stderr || data.compile_output || "No output";
+  } catch (e) {
+    outputBox.innerText = "Error: " + e.message;
+  }
+}
+
+/* ================================ INIT ================================ */
+window.onload = loadCourseVideos;
+</script>
+
 </body>
 </html>

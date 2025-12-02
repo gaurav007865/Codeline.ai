@@ -7,33 +7,21 @@ let progressChartInstance = null;
 
 const userEmail = localStorage.getItem("email");
 const userName = localStorage.getItem("realUserName") || localStorage.getItem("name");
-document.getElementById("userName").textContent = userName;
+document.getElementById("userName").textContent = userName || "User";
 
 
 /* =========================================================
    SECTION SWITCHING
 ========================================================= */
 function showSection(id) {
-  console.log("Switch →", id);  // <-- CHECK IF CALLED
-
-  document.querySelectorAll(".section")
-    .forEach(sec => {
-      sec.style.display = "none";
-    });
-
+  document.querySelectorAll(".section").forEach(sec => sec.style.display = "none");
   const s = document.getElementById(id);
-  if (!s) {
-    console.error("Section NOT FOUND →", id);
-    return;
-  }
-
-  s.style.display = "block";
+  if (s) s.style.display = "block";
 }
 
 
-
 /* =========================================================
-   INITIAL DATA LOAD
+   INITIAL LOAD
 ========================================================= */
 window.addEventListener("DOMContentLoaded", () => {
   loadDashboardCounts();
@@ -47,7 +35,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 
 /* =========================================================
-   1) DASHBOARD COUNTS
+   1) DASHBOARD STATS
 ========================================================= */
 async function loadDashboardCounts() {
   const courses = await (await fetch(`${scriptURL}?action=getCourses`)).json();
@@ -62,9 +50,8 @@ async function loadDashboardCounts() {
 }
 
 
-
 /* =========================================================
-   2) COURSES (Enroll / Requested / Purchased)
+   2) COURSES
 ========================================================= */
 async function loadCourses() {
   const allCourses = await (await fetch(`${scriptURL}?action=getCourses`)).json();
@@ -85,11 +72,9 @@ async function loadCourses() {
         <p><b>Price:</b> ₹${c.price}</p>
 
         ${
-          isPurchased
-            ? `<button class="btn purchased">Purchased ✔</button>`
-            : isRequested
-              ? `<button class="btn requested">Requested ⏳</button>`
-              : `<button class="btn enroll" onclick="requestCourse('${c.name}')">Enroll Now</button>`
+          isPurchased ? `<button class="btn purchased">Purchased ✔</button>` :
+          isRequested ? `<button class="btn requested">Requested ⏳</button>` :
+          `<button class="btn enroll" onclick="requestCourse('${c.name}')">Enroll Now</button>`
         }
       </div>
     `;
@@ -97,12 +82,10 @@ async function loadCourses() {
 }
 
 
-
 /* =========================================================
    3) REQUEST COURSE
 ========================================================= */
 async function requestCourse(courseName) {
-
   const requests = await (await fetch(`${scriptURL}?action=getUserRequests&email=${userEmail}`)).json();
   const purchased = await (await fetch(`${scriptURL}?action=getPurchasedCourses&email=${userEmail}`)).json();
 
@@ -138,23 +121,20 @@ async function requestCourse(courseName) {
 }
 
 
-
 /* =========================================================
    4) MY REQUESTS
 ========================================================= */
 async function loadRequests() {
   const data = await (await fetch(`${scriptURL}?action=getUserRequests&email=${userEmail}`)).json();
 
-  document.getElementById("requestCourseCol").innerHTML =
-    data.map(r => `
+  document.getElementById("requestCourseCol").innerHTML = data.map(r => `
       <div class="box">
         <h4>${r.course}</h4>
         <p>Status: ${r.status}</p>
         <p>${new Date(r.date).toLocaleDateString()}</p>
       </div>
-    `).join("");
+  `).join("");
 }
-
 
 
 /* =========================================================
@@ -163,73 +143,22 @@ async function loadRequests() {
 async function loadCertificates() {
   const certs = await (await fetch(`${scriptURL}?action=getCertificates&email=${userEmail}`)).json();
 
-  const unique = [];
-  const added = new Set();
-
-  certs.forEach(c => {
-    if (!added.has(c.course)) {
-      added.add(c.course);
-      unique.push(c);
-    }
-  });
-
-  document.getElementById("certificateSection").innerHTML =
-    unique.map(c => {
-
-      if (c.status === "Approved") {
-        return `
-          <div class="list-card">
-            <h4>${c.course}</h4>
-            <p>Status: <span class="cert-badge cert-approved">Approved</span></p>
-            <button class="btn enroll" onclick="openCertificate('${c.course}')">View Certificate</button>
-          </div>
-        `;
-      }
-
-      if (c.status === "Rejected") {
-        return `
-          <div class="list-card">
-            <h4>${c.course}</h4>
-            <p>Status: <span class="cert-badge cert-rejected">Rejected</span></p>
-          </div>
-        `;
-      }
-
-      return `
-        <div class="list-card">
-          <h4>${c.course}</h4>
-          <p>Status: <span class="cert-badge cert-requested">Requested</span></p>
-        </div>
-      `;
-    }).join("");
+  document.getElementById("certificateSection").innerHTML = certs.map(c => `
+      <div class="list-card">
+        <h4>${c.course}</h4>
+        <p>Status: ${c.status}</p>
+      </div>
+  `).join("");
 }
-
-
-// Certificate viewer
-function openCertificate(courseName) {
-  localStorage.setItem("certificateCourse", courseName);
-  window.location.href = "certificate.html";
-}
-
 
 
 /* =========================================================
-   6) PURCHASED CLASSES (My Classes)
+   6) PURCHASED VIDEOS
 ========================================================= */
 async function loadPurchasedVideos() {
   const purchased = await (await fetch(`${scriptURL}?action=getPurchasedCourses&email=${userEmail}`)).json();
 
-  const unique = [];
-  const set = new Set();
-
-  purchased.forEach(c => {
-    if (!set.has(c.name)) {
-      set.add(c.name);
-      unique.push(c);
-    }
-  });
-
-  document.getElementById("videoList").innerHTML = unique.map(c => `
+  document.getElementById("videoList").innerHTML = purchased.map(c => `
     <div class="list-card">
       <h4>${c.name}</h4>
       <p>${c.desc}</p>
@@ -238,6 +167,10 @@ async function loadPurchasedVideos() {
   `).join("");
 }
 
+function openWatchPage(courseName){
+  localStorage.setItem("watchCourse", courseName);
+  window.location.href = "course-player.html";  
+}
 
 
 /* =========================================================
@@ -246,7 +179,7 @@ async function loadPurchasedVideos() {
 function loadProgress() {
   const ctx = document.getElementById("progressChart");
 
-  if (progressChartInstance !== null) {
+  if (progressChartInstance) {
     progressChartInstance.destroy();
   }
 
@@ -268,78 +201,19 @@ function loadProgress() {
 }
 
 
-
 /* =========================================================
-   8) WATCH CLASSES — Course List
+   8) WATCH CLASSES
 ========================================================= */
 async function loadWatchClasses() {
   const purchased = await (await fetch(`${scriptURL}?action=getPurchasedCourses&email=${userEmail}`)).json();
 
-  document.getElementById("watchCourseList").innerHTML =
-    purchased.map(c => `
-      <div class="watch-course-card" onclick="openWatchPage('${c.name}')">
-        <h4>${c.name}</h4>
-        <p>${c.desc}</p>
-      </div>
-    `).join("");
+  document.getElementById("watchCourseList").innerHTML = purchased.map(c => `
+    <div class="watch-course-card" onclick="openWatchPage('${c.name}')">
+      <h4>${c.name}</h4>
+      <p>${c.desc}</p>
+    </div>
+  `).join("");
 }
-
-
-
-
-/* =========================================================
-   WATCH COURSE PAGE
-========================================================= */
-function openWatchPage(courseName){
-  localStorage.setItem("watchCourse", courseName);
-  window.location.href = "course-player.html";  
-}
-
-
-
-
-/* =========================================================
-   PLAYLIST + PLAYER
-========================================================= */
-async function loadWatchPageVideos() {
-
-  const courseName = localStorage.getItem("watchCourse");
-
-  const videos = await (await fetch(`${scriptURL}?action=getVideos`)).json();
-
-  const filtered = videos.filter(v => v.course === courseName);
-
-  if (filtered.length === 0) {
-    document.getElementById("playerPlaylist").innerHTML = "<p>No videos found.</p>";
-    return;
-  }
-
-  document.getElementById("playerPlaylist").innerHTML =
-    filtered.map(v => `
-      <div class="playlist-card" onclick="playVideo('${v.link}','${v.title}','${v.desc}')">
-        <h4>${v.title}</h4>
-        <p>${v.desc}</p>
-      </div>
-    `).join("");
-
-  playVideo(filtered[0].link, filtered[0].title, filtered[0].desc);
-}
-
-function playVideo(link, title, desc) {
-
-  if (link.includes("watch?v=")) {
-    link = link.replace("watch?v=", "embed/");
-  }
-
-  if (link.includes("youtu.be")) {
-    link = link.replace("youtu.be/", "www.youtube.com/embed/");
-  }
-
-  document.getElementById("playerFrame").src = link;
-  document.getElementById("playerTitle").innerText = title;
-  document.getElementById("playerDesc").innerText = desc;
-}
-
 
 
 /* =========================================================
@@ -348,4 +222,63 @@ function playVideo(link, title, desc) {
 function logout() {
   localStorage.clear();
   window.location.href = "login.html";
+}
+
+
+/* =========================================================
+   WORKING COMPILER (JUDGE0)
+========================================================= */
+
+const JUDGE0_API = "https://ce.judge0.com/submissions?base64_encoded=false&wait=true";
+
+const LANG_MAP = {
+  javascript: 63,
+  python: 71,
+  cpp: 54,
+  c: 50,
+  java: 62,
+  php: 68,
+  go: 60
+};
+
+async function runCode() {
+
+  const lang = document.getElementById("lang").value;
+  const code = document.getElementById("code").value;
+  const input = document.getElementById("input").value;
+
+  if (!code.trim()) {
+    document.getElementById("output").value = "Write some code first!";
+    return;
+  }
+
+  document.getElementById("output").value = "⏳ Running your code...";
+
+  const language_id = LANG_MAP[lang];
+
+  try {
+    const res = await fetch(JUDGE0_API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        language_id,
+        source_code: code,
+        stdin: input
+      })
+    });
+
+    const data = await res.json();
+
+    const output =
+      data.stdout ||
+      data.stderr ||
+      data.compile_output ||
+      "No output";
+
+    document.getElementById("output").value = output;
+
+  } catch (err) {
+    document.getElementById("output").value =
+      "❌ ERROR:\n" + err.message;
+  }
 }

@@ -1,126 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>User Dashboard</title>
 
-  <link rel="stylesheet" href="user-dashboard.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SkillNest | Dashboard</title>
+
+<!-- CSS -->
+<link rel="stylesheet" href="user-dashboard.css">
+
+<!-- CHART JS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 
 <body>
 
-  <!-- SIDEBAR -->
-  <div class="sidebar">
-    <h2>SkillNest</h2>
+<!-- =================== LOADER =================== -->
+<div id="loader">
+  <div class="loader-ball"></div>
+  <div class="loader-ball"></div>
+  <div class="loader-ball"></div>
+</div>
 
-    <ul>
-      <li class="active" onclick="showSection('dashboard')">🏠 Dashboard</li>
-      <li onclick="showSection('courses')">📘 Courses</li>
-      <li onclick="showSection('requests')">🧾 My Requests</li>
-      <li onclick="showSection('certificates')">🏅 Certificates</li>
-      <li onclick="showSection('videos')">🎥 My Classes</li>
-      <li onclick="showSection('progress')">📊 Progress</li>
-      <!-- <li onclick="showSection('watch')">▶️ Watch Classes</li> -->
-      <li onclick="logout()">🚪 Logout</li>
-    </ul>
-  </div>
+<!-- =================== SIDEBAR =================== -->
+<div class="sidebar">
+  <h2>SkillNest</h2>
 
-  <!-- MAIN BODY -->
-  <div class="main">
+  <ul>
+    <li onclick="showSection('dashboard')">🏠 Dashboard</li>
+    <li onclick="showSection('courses')">📘 Courses</li>
+    <li onclick="showSection('requests')">🧾 My Requests</li>
+    <li onclick="showSection('certificates')">🏅 Certificates</li>
+    <li onclick="showSection('videos')">🎥 My Classes</li>
+    <li onclick="showSection('compiler')">💻 Code Compiler</li>
+    <li onclick="logout()">🚪 Logout</li>
+  </ul>
+</div>
 
-    <h2>Welcome, <span id="userName">User</span></h2>
+<!-- =================== MAIN =================== -->
+<div class="main">
 
-    <!-- 1️⃣ DASHBOARD -->
-    <section id="dashboard" class="section active-section">
-      <div class="box-grid">
+  <h2>Welcome, <span id="userName">User</span></h2>
 
-        <div class="box">
-          <h3>Total Courses</h3>
-          <p id="countCourses">0</p>
-        </div>
+  <!-- ================= Dashboard ================= -->
+  <section id="dashboard" class="section">
+    <div class="box-grid">
 
-        <div class="box">
-          <h3>Your Requests</h3>
-          <p id="countRequests">0</p>
-        </div>
-
-        <div class="box">
-          <h3>Your Certificates</h3>
-          <p id="countCertificates">0</p>
-        </div>
-
-        <div class="box">
-          <h3>Your Videos</h3>
-          <p id="countVideos">0</p>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- 2️⃣ COURSES -->
-    <section id="courses" class="section hidden-section">
-      <h3>📘 All Courses</h3>
-      <div id="allCourses">Loading...</div>
-    </section>
-
-    <!-- 3️⃣ MY REQUESTS -->
-    <section id="requests" class="section hidden-section">
-      <h3>🧾 My Requests</h3>
-      <div id="requestCourseCol">Loading...</div>
-    </section>
-
-    <!-- 4️⃣ CERTIFICATES -->
-    <section id="certificates" class="section hidden-section">
-      <h3>🏅 Certificates</h3>
-      <div id="certificateSection">Loading...</div>
-    </section>
-
-    <!-- 5️⃣ PURCHASED CLASSES -->
-    <section id="videos" class="section hidden-section">
-      <h3>🎥 My Purchased Classes</h3>
-      <div id="videoList">Loading...</div>
-    </section>
-
-    <!-- 6️⃣ PROGRESS -->
-    <section id="progress" class="section hidden-section">
-      <h3>📊 Your Progress</h3>
-      <canvas id="progressChart" height="180"></canvas>
-    </section>
-
-    <!-- 7️⃣ WATCH CLASSES -->
-    <section id="watch" class="section hidden-section">
-      <h3>▶️ Watch Your Classes</h3>
-      <div id="watchCourseList">Loading purchased courses...</div>
-    </section>
-
-    <!-- WATCH PLAYER PAGE -->
-    <section id="watchPlayer" class="section hidden-section">
-
-      <div class="watch-container">
-
-        <!-- LEFT VIDEO PLAYER -->
-        <div class="watch-left">
-          <div class="watch-player">
-            <iframe id="playerFrame" allowfullscreen></iframe>
-          </div>
-
-          <h2 id="playerTitle">Select a video</h2>
-          <p id="playerDesc"></p>
-        </div>
-
-        <!-- RIGHT PLAYLIST -->
-        <div class="watch-right" id="playerPlaylist">
-          Loading playlist...
-        </div>
-
+      <div class="box">
+        <h3>Total Courses</h3>
+        <p id="countCourses">0</p>
       </div>
 
-    </section>
+      <div class="box">
+        <h3>Your Requests</h3>
+        <p id="countRequests">0</p>
+      </div>
 
-  </div>
+      <div class="box">
+        <h3>Your Certificates</h3>
+        <p id="countCertificates">0</p>
+      </div>
 
-  <script src="user.js"></script>
+      <div class="box">
+        <h3>Your Videos</h3>
+        <p id="countVideos">0</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= Courses ================= -->
+  <section id="courses" class="section hidden">
+    <h3>📘 All Courses</h3>
+    <div id="allCourses">Loading...</div>
+  </section>
+
+  <!-- ================= Requests ================= -->
+  <section id="requests" class="section hidden">
+    <h3>🧾 My Requests</h3>
+    <div id="requestCourseCol">Loading...</div>
+  </section>
+
+  <!-- ================= Certificates ================= -->
+  <section id="certificates" class="section hidden">
+    <h3>🏅 Certificates</h3>
+    <div id="certificateSection">Loading...</div>
+  </section>
+
+  <!-- ================= My Classes ================= -->
+  <section id="videos" class="section hidden">
+    <h3>🎥 My Purchased Classes</h3>
+    <div id="videoList">Loading...</div>
+  </section>
+
+  <!-- ================= Compiler ================= -->
+  <section id="compiler" class="section hidden">
+    <h3>💻 Code Compiler</h3>
+
+    <div style="display:flex; gap:10px; align-items:center; margin-bottom:10px;">
+      <select id="lang">
+        <option value="javascript">JavaScript</option>
+        <option value="python">Python</option>
+        <option value="cpp">C++</option>
+        <option value="c">C</option>
+        <option value="java">Java</option>
+        <option value="php">PHP</option>
+        <option value="go">Go</option>
+      </select>
+
+      <button onclick="runCode()">▶ Run</button>
+    </div>
+
+    <textarea id="code" class="editor" placeholder="Write code here..."></textarea>
+    <textarea id="input" class="input-box" placeholder="Input (optional)..."></textarea>
+    <textarea id="output" class="output-box" readonly placeholder="Output..."></textarea>
+  </section>
+
+</div>
+
+<!-- =================== JS =================== -->
+<script src="user.js"></script>
+
+<script>
+/* Hide Loader */
+window.onload = () => {
+  document.getElementById("loader").style.display = "none";
+};
+</script>
+
 </body>
 </html>
