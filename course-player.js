@@ -38,7 +38,6 @@ async function loadCourseVideos() {
       </div>
     `).join("");
 
-    // Auto play first
     playVideo(filtered[0].id, filtered[0].link, filtered[0].title, filtered[0].desc);
 
   } catch (err) {
@@ -52,7 +51,6 @@ async function loadCourseVideos() {
 ================================================ */
 function playVideo(videoID, link, title, desc) {
 
-  // Convert to embed
   if (link.includes("watch?v=")) link = link.replace("watch?v=", "embed/");
   if (link.includes("youtu.be")) link = link.replace("youtu.be/", "www.youtube.com/embed/");
 
@@ -65,7 +63,7 @@ function playVideo(videoID, link, title, desc) {
 
 
 /* ================================================
-   LOAD ASSIGNMENTS (FINAL FIXED)
+   LOAD ASSIGNMENTS
 ================================================ */
 async function loadAssignments(videoID) {
   const box = document.getElementById("assignmentList");
@@ -75,14 +73,12 @@ async function loadAssignments(videoID) {
     const res = await fetch(`${scriptURL}?action=getAssignments`);
     const data = await res.json();
 
-    // If backend returned error
     if (!Array.isArray(data)) {
       console.error("Assignments error:", data);
       box.innerHTML = "<p>Error loading assignments.</p>";
       return;
     }
 
-    // 🔥 CORRECT FILTER (based on your sheet column names)
     const filtered = data.filter(a =>
       a.VideoID.toString() === videoID.toString() &&
       a.CourseName === courseName
@@ -114,7 +110,6 @@ async function loadAssignments(videoID) {
 }
 
 
-
 /* ================================================
    UPLOAD ASSIGNMENT (FINAL WORKING)
 ================================================ */
@@ -122,24 +117,23 @@ async function uploadAssignment(assignmentId, courseName, videoId, assignmentNo)
   const file = event.target.files[0];
   if (!file) return;
 
-  alert("Uploading...");
+  // STEP 1: Upload to Drive
+  const form = new FormData();
+  form.append("action", "uploadAssignmentFile");
+  form.append("fileBytes", file);
+  form.append("fileType", file.type);
+  form.append("fileName", file.name);
 
-  // Step 1: Upload file to Drive
-  const uploadForm = new FormData();
-  uploadForm.append("action", "uploadAssignmentFile");
-  uploadForm.append("fileName", file.name);
-  uploadForm.append("fileType", file.type);
-  uploadForm.append("fileBytes", new Blob([file], { type: file.type }));
-
-  const uploadRes = await fetch(scriptURL, { method: "POST", body: uploadForm });
+  const uploadRes = await fetch(scriptURL, { method: "POST", body: form });
   const uploadData = await uploadRes.json();
 
   if (!uploadData.url) {
+    console.log(uploadData);
     alert("File upload failed!");
     return;
   }
 
-  // Step 2: Save details in DB
+  // STEP 2: Save to DB
   const submitForm = new FormData();
   submitForm.append("action", "submitAssignment");
   submitForm.append("email", localStorage.getItem("email"));
@@ -154,10 +148,9 @@ async function uploadAssignment(assignmentId, courseName, videoId, assignmentNo)
   if (submitData.status === "success") {
     alert("Assignment submitted!");
   } else {
-    alert("Submit failed!");
+    alert("Assignment save failed!");
   }
 }
-
 
 /* ================================================
    COMPILER
