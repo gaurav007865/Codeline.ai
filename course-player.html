@@ -12,56 +12,76 @@
   <!-- =============================== -->
   <!-- 🔻 HEADER BAR -->
   <!-- =============================== -->
- <div class="top-bar">
-  <div class="logo">SkillNest</div>
-  <div class="course-title" id="courseTitle">Loading...</div>
+  <div class="top-bar">
+    <div class="logo">SkillNest</div>
+    <div class="course-title" id="courseTitle">Loading...</div>
 
-  <button class="playlist-toggle" onclick="togglePlaylist()">
-    Playlist
-  </button>
-</div>
+    <button class="playlist-toggle" onclick="togglePlaylist()">
+      Playlist
+    </button>
+  </div>
 
 
   <!-- =============================== -->
-  <!-- 🔻 MAIN PLAYER AREA -->
+  <!-- 🔻 MAIN PLAYER + PLAYLIST -->
   <!-- =============================== -->
-<div class="player-container">
+  <div class="player-container">
 
-  <!-- LEFT -->
-  <div class="video-area">
-      <iframe id="playerFrame"></iframe>
+    <!-- LEFT VIDEO AREA -->
+    <div class="video-area">
+        <iframe id="playerFrame" allowfullscreen></iframe>
 
-      <div class="video-info">
-        <h2 id="videoTitle">Select a video</h2>
-        <p id="videoDesc"></p>
+        <div class="video-info">
+          <h2 id="videoTitle">Select a video</h2>
+          <p id="videoDesc"></p>
+        </div>
+    </div>
+
+    <!-- RIGHT PLAYLIST -->
+    <div class="playlist" id="playlist">
+        Loading playlist...
+    </div>
+
+  </div>
+
+
+  <!-- =============================== -->
+  <!-- 🔻 ASSIGNMENT SECTION -->
+  <!-- =============================== -->
+  <div class="assignment-section">
+      <h3>📝 Assignments</h3>
+     <div id="assignmentList">Loading assignments...</div>
+
+  </div>
+
+
+  <!-- =============================== -->
+  <!-- 🔻 COMPILER SECTION -->
+  <!-- =============================== -->
+
+  <div class="compiler-container">
+
+      <div class="compiler-header">
+          <span class="dot red"></span>
+          <span class="dot yellow"></span>
+          <span class="dot green"></span>
+
+          <select id="language" class="lang-select">
+              <option value="python">Python</option>
+              <option value="cpp">C++</option>
+              <option value="c">C</option>
+              <option value="java">Java</option>
+              <option value="csharp">C#</option>
+              <option value="javascript">JavaScript</option>
+          </select>
       </div>
+
+      <textarea id="codeEditor" placeholder="Write your code..."></textarea>
+
+      <button onclick="runCode()" class="run-btn">▶ Run</button>
+
+      <pre id="outputBox">Output will appear here...</pre>
   </div>
-
-  <!-- RIGHT PLAYLIST -->
-  <div class="playlist" id="playlist">
-      Loading playlist...
-  </div>
-
-</div>
-
-<div class="compiler-area">
-    <h3>💻 Try Yourself Compiler</h3>
-
-    <select id="language">
-        <option value="python">Python</option>
-        <option value="cpp">C++</option>
-        <option value="c">C</option>
-        <option value="java">Java</option>
-        <option value="csharp">C#</option>
-        <option value="javascript">JavaScript</option>
-    </select>
-
-    <textarea id="codeEditor" placeholder="Write your code here..."></textarea>
-
-    <button onclick="runCode()" class="run-btn">▶ Run Code</button>
-
-    <pre id="outputBox">Output will appear here...</pre>
-</div>
 
 
   <script src="course-player.js"></script>

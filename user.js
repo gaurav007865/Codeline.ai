@@ -1,7 +1,7 @@
 /* =========================================================
    CONFIG + USER INFO
 ========================================================= */
-const scriptURL = "https://script.google.com/macros/s/AKfycbyUvEqgWERUwesvtLlm6e2swDFwlx_m0I-GUCKSD_oI_Bq2GxjPxjm6twgxctBe8D5G/exec";
+const scriptURL = "https://script.google.com/macros/s/AKfycby78u-pJ8Smigy76Wl44yTPACL5AO33VEqoqreVK39s6vTeH5u8Khud3xfO7qY2UcB2gw/exec";
 
 let progressChartInstance = null;
 
